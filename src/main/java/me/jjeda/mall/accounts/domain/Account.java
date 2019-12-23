@@ -1,5 +1,6 @@
 package me.jjeda.mall.accounts.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import me.jjeda.mall.accounts.dto.AccountDto;
 import me.jjeda.mall.common.model.Address;
+import me.jjeda.mall.orders.domain.Order;
 
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -17,7 +19,10 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -34,11 +39,19 @@ public class Account {
 
     private String nickname;
 
+    @Column(unique = true)
     private String email;
 
     private String password;
 
     private String phone;
+
+    /**
+     * SELLER 의 경우 팔고있는 상품
+     */
+    @OneToMany(mappedBy = "account")
+    @JsonIgnore
+    private List<Order> orders = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private AccountStatus status;
@@ -65,5 +78,9 @@ public class Account {
         this.phone = accountDto.getPhone();
         this.email = accountDto.getEmail();
         this.modifiedAt = LocalDateTime.now();
+    }
+
+    public void insertOrder(Order order) {
+        this.orders.add(order);
     }
 }

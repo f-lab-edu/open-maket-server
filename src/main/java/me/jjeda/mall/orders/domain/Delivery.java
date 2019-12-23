@@ -1,6 +1,11 @@
 package me.jjeda.mall.orders.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import me.jjeda.mall.common.model.Address;
 
@@ -14,7 +19,11 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class Delivery {
 
     @Id
@@ -31,4 +40,8 @@ public class Delivery {
     @Enumerated(EnumType.STRING)
     private DeliveryStatus status;
 
+    @JsonIgnore
+    public Order getOrder() {
+        return order;
+    }
 }
