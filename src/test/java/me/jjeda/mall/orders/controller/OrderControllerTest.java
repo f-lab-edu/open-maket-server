@@ -46,7 +46,6 @@ public class OrderControllerTest extends BaseControllerTest {
     @Autowired
     private OrderService orderService;
 
-
     @TestDescription("정상적으로 주문을 완료하는 테스트")
     @Test
     @Transactional
